@@ -11,7 +11,7 @@ exports.up = async (knex) => {
   await knex.schema.createTable("posts", (table) => {
     table.increments("id");
     table.integer("userId").unsigned().notNullable();
-    table.text("postContent");
+    table.text("postContent").notNullable();
     table.datetime("createdAt").notNullable().defaultTo(knex.fn.now());
     table.datetime("updatedAt").notNullable().defaultTo(knex.fn.now());
     table.datetime("deletedAt");
@@ -19,10 +19,10 @@ exports.up = async (knex) => {
     table.foreign("userId").references("id").inTable("users");
   });
   await knex.schema.createTable("comments", (table) => {
-    table.increments("commentsId");
+    table.increments("id");
     table.integer("userId").unsigned().notNullable();
     table.integer("postId").unsigned().notNullable();
-    table.text("commentContent");
+    table.text("commentContent").notNullable();
     table.datetime("createdAt").notNullable().defaultTo(knex.fn.now());
     table.datetime("updatedAt").notNullable().defaultTo(knex.fn.now());
     table.datetime("deletedAt");
