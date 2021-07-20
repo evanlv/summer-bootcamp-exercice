@@ -22,7 +22,7 @@ exports.up = async (knex) => {
     table.increments("id");
     table.integer("userId").unsigned().notNullable();
     table.integer("postId").unsigned().notNullable();
-    table.text("commentContent").notNullable();
+    table.text("content").notNullable();
     table.datetime("createdAt").notNullable().defaultTo(knex.fn.now());
     table.datetime("updatedAt").notNullable().defaultTo(knex.fn.now());
     table.datetime("deletedAt");

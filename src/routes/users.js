@@ -1,13 +1,22 @@
 const error = require("../error");
+const makePaginate = require("../makePaginate");
 
 const usersRoute = (app, { db }) => {
   // GET /users
-  app.get("/users", async (req, res) => {
-    res.send(await db("users"));
+  app.get("/users", async (req, res, next) => {
+    const paginate = makePaginate(req);
+
+    try {
+      res.send([await paginate(db("users"))]);
+    } catch (error) {
+      next(error);
+
+      return;
+    }
   });
 
   // GET /users/:userId
-  app.get("/users/:userId", async (req, res) => {
+  app.get("/users/:userId", async (req, res, next) => {
     const {
       params: { userId },
     } = req;

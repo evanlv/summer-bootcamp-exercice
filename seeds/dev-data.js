@@ -25,4 +25,10 @@ exports.seed = async (knex) => {
       userId: rand(minUserId, maxUserId),
     }))
   );
+  await knex("comments").insert(
+    [...new Array(300)].map(() => ({
+      content: faker.lorem.paragraphs(rand(1, 4)),
+      userId: rand(minUserId, maxUserId),
+    }))
+  );
 };
