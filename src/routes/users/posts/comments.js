@@ -64,7 +64,7 @@ const commentsRoute = (app, { db }) => {
 
     await db("comments").where({ userId, postId, id }).delete();
 
-    res.send({ Status: "Comment deleted" });
+    res.send({ status: "Comment deleted" });
   });
 };
 

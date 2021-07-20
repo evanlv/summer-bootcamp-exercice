@@ -35,12 +35,12 @@ const usersRoute = (app, { db }) => {
   // POST /users
   app.post("/users", async (req, res, next) => {
     const {
-      body: { username, email, password },
+      body: { firstName, lastName },
     } = req;
 
     try {
       const [user] = await db("users")
-        .insert({ username, email, password })
+        .insert({ firstName, lastName })
         .returning("*");
 
       res.send(user);
@@ -54,14 +54,14 @@ const usersRoute = (app, { db }) => {
   //PUT /users/:userId
   app.put("/users/:userId", async (req, res, next) => {
     const {
-      params: { id: userId },
-      body: { username, email, password },
+      params: { userId },
+      body: { firstName, lastName },
     } = req;
 
     try {
       const [user] = await db("users")
-        .where({ userId })
-        .update({ username, email, password })
+        .where({ id: userId })
+        .update({ firstName, lastName, updatedAt: new Date() })
         .returning("*");
 
       res.send(user);
@@ -79,9 +79,12 @@ const usersRoute = (app, { db }) => {
     } = req;
 
     try {
-      const [user] = await db("users").where({ id: userId }).delete();
+      const [user] = await db("users")
+        .where({ id: userId })
+        .delete()
+        .update({ deletedAt: new Date() });
 
-      res.send({ Status: "User deleted" });
+      res.send({ user, status: "User deleted" });
     } catch (error) {
       next(error);
 
