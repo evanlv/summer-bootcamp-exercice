@@ -6,4 +6,7 @@ module.exports = {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
   },
+  seed: {
+    directory: "./seeds/dev-data.js",
+  },
 };
