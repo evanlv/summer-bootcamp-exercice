@@ -79,7 +79,7 @@ const usersRoute = (app, { db }) => {
     } = req;
 
     try {
-      const user = await db("users")
+      const [user] = await db("users")
         .where({ id: userId })
         .delete()
         .returning("*");
