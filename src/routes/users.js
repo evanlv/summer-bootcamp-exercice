@@ -79,10 +79,10 @@ const usersRoute = (app, { db }) => {
     } = req;
 
     try {
-      const [user] = await db("users")
+      const user = await db("users")
         .where({ id: userId })
         .delete()
-        .update({ deletedAt: new Date() });
+        .returning("*");
 
       res.send({ user, status: "User deleted" });
     } catch (error) {
