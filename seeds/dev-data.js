@@ -8,7 +8,7 @@ exports.seed = async (knex) => {
   await knex("users").delete();
 
   await knex("users").insert(
-    [...new Array(100)].map(() => ({
+    [...new Array(50)].map(() => ({
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
     }))
@@ -19,16 +19,22 @@ exports.seed = async (knex) => {
     .max("id");
 
   await knex("posts").insert(
-    [...new Array(300)].map(() => ({
+    [...new Array(100)].map(() => ({
       title: faker.lorem.sentence(),
-      content: faker.lorem.paragraphs(rand(1, 4)),
+      content: faker.lorem.paragraphs(rand(1, 2)),
       userId: rand(minUserId, maxUserId),
     }))
   );
+
+  const [{ min: minPostId, max: maxPostId }] = await knex("posts")
+    .min("id")
+    .max("id");
+
   await knex("comments").insert(
-    [...new Array(300)].map(() => ({
-      content: faker.lorem.paragraphs(rand(1, 4)),
+    [...new Array(150)].map(() => ({
+      content: faker.lorem.paragraphs(rand(1, 2)),
       userId: rand(minUserId, maxUserId),
+      postId: rand(minPostId, maxPostId),
     }))
   );
 };
