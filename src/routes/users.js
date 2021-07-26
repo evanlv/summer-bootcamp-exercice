@@ -7,7 +7,7 @@ const usersRoute = (app, { db }) => {
     const paginate = makePaginate(req);
 
     try {
-      res.send([await paginate(db("users"))]);
+      res.send(await paginate(db("users")));
     } catch (error) {
       next(error);
 
