@@ -22,7 +22,7 @@ const usersRoute = (app, { db }) => {
     } = req;
 
     try {
-      const [user] = await db("users").where({ id: userId });
+      const user = await db("users").where({ id: userId });
 
       res.send(user);
     } catch (error) {
@@ -39,7 +39,7 @@ const usersRoute = (app, { db }) => {
     } = req;
 
     try {
-      const [user] = await db("users")
+      const user = await db("users")
         .insert({ firstName, lastName })
         .returning("*");
 
@@ -59,7 +59,7 @@ const usersRoute = (app, { db }) => {
     } = req;
 
     try {
-      const [user] = await db("users")
+      const user = await db("users")
         .where({ id: userId })
         .update({ firstName, lastName, updatedAt: new Date() })
         .returning("*");
@@ -79,7 +79,7 @@ const usersRoute = (app, { db }) => {
     } = req;
 
     try {
-      const [user] = await db("users")
+      const user = await db("users")
         .where({ id: userId })
         .delete()
         .returning("*");

@@ -1,67 +1,102 @@
-const postsRoute = (app, { db, redis }) => {
+const error = require("../../error");
+const makePaginate = require("../../makePaginate");
+
+const postsRoute = (app, { db }) => {
   // GET /users/:userId/posts
-  app.get("/users/:userId/posts", async (req, res) => {
+  app.get("/users/:userId/posts", async (req, res, next) => {
     const {
       params: { userId },
     } = req;
 
-    res.send(await db("posts").where({ userId }));
-  });
+    const paginate = makePaginate(req);
 
-  // GET /users/:userId/posts/:postId
-  app.get("/users/:userId/posts/:postId", async (req, res) => {
-    const {
-      params: { userId, postId },
-    } = req;
-    const post = await db("posts").where({ userId, id: postId });
-
-    if (!post.length) {
-      res.status(404).send({ error: "not found" });
+    try {
+      res.send(await paginate(db("posts").where({ userId })));
+    } catch (error) {
+      next(error);
 
       return;
     }
+  });
 
-    res.send(post);
+  // GET /users/:userId/posts/:postId
+  app.get("/users/:userId/posts/:postId", async (req, res, next) => {
+    const {
+      params: { userId, postId },
+    } = req;
+
+    try {
+      const post = await db("posts").where({ userId, id: postId });
+
+      res.send(post);
+    } catch (error) {
+      next(error);
+
+      return;
+    }
   });
 
   // POST /users/:userId/posts
-  app.post("/users/:userId/posts", async (req, res) => {
+  app.post("/users/:userId/posts", async (req, res, next) => {
     const {
       params: { userId },
-      body: { postContent },
+      body: { title, content },
     } = req;
-    const post = await db("posts")
-      .insert({ userId, postContent })
-      .returning("*");
 
-    res.send(post);
+    try {
+      const post = await db("posts")
+        .insert({ userId, title, content })
+        .returning("*");
+
+      res.send(post);
+    } catch (error) {
+      next(error);
+
+      return;
+    }
   });
 
   // PUT /users/:userId/posts/:postId
-  app.put("/users/:userId/posts/:postId", async (req, res) => {
+  app.put("/users/:userId/posts/:postId", async (req, res, next) => {
     const {
       params: { userId, postId },
-      body: { postContent },
+      body: { content, title },
     } = req;
-    const post = await db("posts")
-      .where({
-        userId,
-        id: postId,
-      })
-      .update({ postContent })
-      .returning("*");
 
-    res.send(post);
+    try {
+      const post = await db("posts")
+        .where({
+          userId,
+          id: postId,
+        })
+        .update({ content, title })
+        .returning("*");
+
+      res.send(post);
+    } catch (error) {
+      next(error);
+
+      return;
+    }
   });
 
   // DELETE /users/:userId/posts/:postId
-  app.delete("/users/:userId/posts/:postId", async (req, res) => {
+  app.delete("/users/:userId/posts/:postId", async (req, res, next) => {
     const {
-      params: { userId },
+      params: { userId, postId },
     } = req;
-    const post = await db("posts").where({ userId, id: postId }).delete();
 
-    res.send(post);
+    try {
+      const post = await db("posts").where({ userId, id: postId }).delete();
+
+      res.send(post);
+    } catch (error) {
+      next(error);
+
+      next(error);
+
+      return;
+    }
   });
 };
 
