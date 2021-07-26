@@ -89,16 +89,17 @@ const commentsRoute = (app, { db }) => {
 
   // DELETE /users/:userId/posts/:postId/comments/
   app.delete(
-    "/users/:userId/posts/:postId/comments/:id",
+    "/users/:userId/posts/:postId/comments/:commentId",
     async (req, res, next) => {
       const {
-        params: { userId, postId, id },
+        params: { userId, postId, commentId },
       } = req;
 
       try {
         const comment = await db("comments")
-          .where({ userId, postId, id })
-          .delete();
+          .where({ userId, postId, id: commentId })
+          .delete()
+          .returning("*");
 
         res.send({ comment, status: "Comment deleted" });
       } catch (error) {
