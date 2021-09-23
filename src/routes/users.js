@@ -51,7 +51,7 @@ const usersRoute = (app, { db }) => {
     }
   });
 
-  //PUT /users/:userId
+  // PUT /users/:userId
   app.put("/users/:userId", async (req, res, next) => {
     const {
       params: { userId },
