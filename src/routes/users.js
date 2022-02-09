@@ -7,7 +7,7 @@ const usersRoute = (app, { db }) => {
     const paginate = makePaginate(req);
 
     try {
-      res.send([await paginate(db("users"))]);
+      res.send(await paginate(db("users")));
     } catch (error) {
       next(error);
 
@@ -51,7 +51,7 @@ const usersRoute = (app, { db }) => {
     }
   });
 
-  //PUT /users/:userId
+  // PUT /users/:userId
   app.put("/users/:userId", async (req, res, next) => {
     const {
       params: { userId },

@@ -87,9 +87,12 @@ const postsRoute = (app, { db }) => {
     } = req;
 
     try {
-      const post = await db("posts").where({ userId, id: postId }).delete();
+      const post = await db("posts")
+        .where({ userId, id: postId })
+        .delete()
+        .returnin("*");
 
-      res.send(post);
+      res.send({ post, status: "Post deleted" });
     } catch (error) {
       next(error);
 
